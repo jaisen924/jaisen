@@ -17,8 +17,40 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Form submitted successfully!");
+  
+    // Google Form URL and entry IDs
+    const googleFormURL = "https://docs.google.com/forms/d/1QGx1JKbKR0jvKmzvRlRWQf5SxvRRMY9Vf6avI4FIMdQ/prefill";
+  
+    // Map your React form fields to Google Form entry IDs
+    const formDataToGoogleForm = {
+      "entry.2005620554": formData.name,   // Replace with the entry ID for 'Your Name'
+      "entry.1045781291": formData.email, // Replace with the entry ID for 'Email Address'
+      "entry.1065046570": formData.message // Replace with the entry ID for 'Write Message'
+    };
+  
+    // Convert data to URL-encoded string
+    const body = new URLSearchParams(formDataToGoogleForm);
+  
+    // Submit data to Google Form
+    fetch(googleFormURL, {
+      method: "POST",
+      body,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("Form submitted successfully!");
+          // Optionally, reset the form
+        } else {
+          alert("Failed to submit the form.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error submitting the form:", error);
+        alert("An error occurred. Please try again.");
+      });
   };
 
   return (
